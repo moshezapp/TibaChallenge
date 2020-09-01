@@ -1,0 +1,13 @@
+
+<div *ngIf="favList.length == 0; else haveFavs">
+  You don't have any favorites yet.
+</div>
+<ng-template #haveFavs>
+  <div *ngFor="let f of favList" class="alert alert-info w-50 " style="margin: auto;">
+    <span class="badge badge-secondary">
+      {{ f.id }}
+    </span>
+      {{ f.full_name }}
+  </div>
+</ng-template>
+

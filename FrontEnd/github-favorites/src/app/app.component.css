@@ -1,0 +1,20 @@
+
+
+div.m-navbar {
+    width: 100vw;
+    background-color: blanchedalmond;
+    text-align: center;
+}
+
+div.m-navbar > a {
+    font-size: 25px;
+    padding: 15px;
+    margin: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+div.m-navbar > a:hover {
+    color: blue;
+    font-weight: bold;
+}

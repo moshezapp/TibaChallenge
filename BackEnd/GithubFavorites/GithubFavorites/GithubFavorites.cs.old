@@ -1,0 +1,91 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http.Results;
+//using System.Web.Http
+//using System.Web.Http;
+using GithubFavorites.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS;
+using Microsoft.Extensions.Configuration;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace GithubFavorites
+{
+
+    [Route("api/[controller]")]
+    public class GithubFavorites : System.Web.Http.ApiController
+    {
+
+        private IConfiguration configuration;
+        private HttpContext Context;
+
+
+        public GithubFavorites(IConfiguration iConfig, HttpContext iContext)
+        {
+            this.configuration = iConfig;
+            this.Context = iContext;
+        }
+
+        //[Route("api/Search")]
+        [System.Web.Http.AllowAnonymous]
+        [HttpGet]
+        public async Task<List<Repo>> Search(/*string srchStr*/)
+        {
+            
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "Easy");
+                var action = await client.GetAsync("https://api.github.com/search/repositories?q=adfadf");
+                var data = await action.Content.ReadAsStringAsync();
+                var json = Newtonsoft.Json.JsonConvert.DeserializeObject<RepoList>(data);
+                
+                return json.items;
+            }
+            
+        }
+
+        //[Route("api/Login")]
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+        [HttpPost]
+        public IActionResult Login([FromBody]User user)
+        {
+
+            //validations
+            if (string.IsNullOrEmpty(user.username) || string.IsNullOrEmpty(user.password))
+            {
+                var message = "Invalid username or password";
+                var err = new System.Web.Http.HttpError(message);
+                //return new BadRequestErrorMessageResult("dvhsdf", this);
+
+            }
+
+            var token = new JWT.JWT(this.configuration).GenerateJSONWebToken(user);
+
+            return new OkObjectResult(token);
+        }
+
+        public void AddFavorite(Repo repo)
+        {
+            var currentUser = this.Context.User;
+            string user_name = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
+
+            //ADD FAVORITES TO USERNAME
+
+
+        }
+
+        public void GetFavorites()
+        {
+            var currentUser = this.Context.User;
+            string user_name = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub).Value;
+
+
+        }
+    }
+}

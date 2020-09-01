@@ -1,0 +1,21 @@
+<form [formGroup]="SearchForm" (ngSubmit)="Search()">
+  <input formControlName="inputSearch" class="form-control w-25 m-2 d-inline" type="text" #searchStr> 
+  <button type="submit" (click)="Search(searchStr.value)" class="btn btn-outline-primary ">Search</button>
+
+  <br>
+
+  <!-- <div [style.visibility]="(reposList.length > 0) ? 'visible' : 'hidden' " > -->
+    <div [class.m-fadeOut]="reposList.length == 0" [class.m-fadeIn]="reposList.length > 0">
+    Add To Your Favorites: <br>
+    <select formControlName="searchResults" type="button" class="btn btn-outline-primary mr-2 w-25" id="category" name="category"
+      value="Toggle dropdown" (change)="AddToFavorites(this)">
+      
+      <option *ngFor="let r of reposList" [value]="r.id">
+        {{ r.full_name }}
+      </option>
+    </select>
+    <br>
+  </div>
+
+ 
+</form>

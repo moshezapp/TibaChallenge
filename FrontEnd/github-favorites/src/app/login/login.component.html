@@ -1,0 +1,15 @@
+<form [formGroup]="LoginForm" (ngSubmit)="login()">
+
+  <input type="text" formControlName="username" class="form-control w-25" placeholder="Enter username">
+  <input type="password" formControlName="password" class="form-control w-25" placeholder="Enter password">
+
+  <button type="submit" [disabled]="!LoginForm.valid" class="btn btn-primary">Submit</button>
+
+</form>
+
+<br>
+<br>
+
+<a href="javascript:;" (click)="Register()">
+  Register
+</a>
